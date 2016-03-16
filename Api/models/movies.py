@@ -1,7 +1,6 @@
 from mongoengine import *
 from settings import db
 import datetime
-from models import *
 
 class Movies(Document):
     Movie_name      =     StringField(max_length=50, required=True)
@@ -14,8 +13,11 @@ class Movies(Document):
     Reviews_rating  =     FloatField(default=0)
     User_rating     =     FloatField(default=0)
     Social_rating   =     FloatField(default=0)
+    User_rating_list=     ListField(FloatField())
+    Cast            =     ListField(StringField())
+    Directors       =     ListField(StringField())
     Deleted         =     BooleanField(default=False)
-    Timestamp       =     DateTimeField(default=datetime.datetime.now())
+    Created_at      =     DateTimeField(default=datetime.datetime.now())
 
 
     #def __repr__(self):

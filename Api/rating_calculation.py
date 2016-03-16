@@ -20,6 +20,9 @@ def calculate_rating(positive_reviews,negative_reviews):
     pos_sz = len(positive_reviews)
     neg_sz = len(negative_reviews)
 
+    if pos_sz==0 and neg_sz==0:
+        rating = 5
+        return rating
     if pos_sz==1 and neg_sz==0:
         rating = 5 + (positive_reviews[0]['polarity'])/20
         return rating

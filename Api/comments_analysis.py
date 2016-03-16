@@ -3,6 +3,8 @@ import json
 import math
 from models import Reviews
 from rating_calculation import *
+from mongoengine.queryset import DO_NOTHING,DoesNotExist,InvalidQueryError,\
+                                 MultipleObjectsReturned, NotUniqueError, OperationError
 
 def sentiment(sentence):
     analysis = TextBlob(sentence)
@@ -17,32 +19,31 @@ def sentiment(sentence):
         return {'polarity':polarity,
                 'sense':'neutral'}
 
-def update_movie_review(movie_name, sentence, review_author='Pankaj Gupta'):
+def update_movie_review(movie_id, sentence, review_author='Pankaj Gupta'):
     try:
         analysis = TextBlob(sentence)
         polarity = list(analysis.sentiment)[0]
         if(polarity>0):
-            review = Reviews(Movie_name=movie_name, Body=sentence, Polarity=(polarity*100), Sense='positive', Review_author=review_author)
+            review = Reviews(Movie_id=movie_id, Body=sentence, Polarity=(polarity*100), Sense='positive', Review_author=review_author)
             review.save()
         elif(polarity<0):
-            review = Reviews(Movie_name=movie_name, Body=sentence, Polarity=(-1*polarity*100), Sense='negative', Review_author=review_author)
+            review = Reviews(Movie_id=movie_id, Body=sentence, Polarity=(-1*polarity*100), Sense='negative', Review_author=review_author)
             review.save()
         else:
-            review = Reviews(Movie_name=movie_name, Body=sentence, Polarity=polarity, Sense='neutral', Review_author=review_author)
+            review = Reviews(Movie_id=movie_id, Body=sentence, Polarity=polarity, Sense='neutral', Review_author=review_author)
             review.save()
         print('Successfully updated')
         return {'Success': True}
     except:
-        print('Something went wrong in updating reviews in DB')
-        return {'Success': False}
+        raise InvalidQueryError("Check for details")
 
 
-def get_movie_reviews(movie_name,offset=0,limit=10):
+def get_movie_reviews(movie_id,offset=0,limit=10):
     positive_reviews=[]
     negative_reviews=[]
     neutral_reviews=[]
-    reviews = Reviews.objects(Movie_name=movie_name)
-
+    reviews = Reviews.objects(Movie_id=movie_id)
+    #print reviews
     for review in reviews:
         d={}
         d['sentence']=review.Body

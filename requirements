@@ -8,7 +8,6 @@ mongoengine
 flask-mongoengine
 argparse
 boto
-facebook-sdk
 google-api-python-client
 httplib2
 jsonpickle

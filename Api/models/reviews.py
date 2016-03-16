@@ -7,7 +7,7 @@ class Reviews(Document):
     Timestamp 		=     DateTimeField(default= datetime.datetime.now())
     Deleted   		=     BooleanField(default=False, required=True)
     Review_author 	= 	  StringField(required=True, default='Pankaj Gupta')
-    Movie_name 		=     StringField(required=True)
+    Movie_id 		=     StringField(required=True)
     Polarity 		=     FloatField(required=True)
     Sense  			=     StringField(choices=('positive','neutral','negative'),required=True)
 
